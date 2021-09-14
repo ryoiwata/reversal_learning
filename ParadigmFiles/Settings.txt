@@ -1,0 +1,63 @@
+Demo:
+
+string experiment_type = "Demo";
+int num_blocks = 0;
+array <int> num_trials[num_blocks] = {0,0};
+array <double> feedback_accuracy[num_blocks] = {0.0, 0.0};  	
+array <int> pass_criteria[num_blocks][2] = {{0,0},{0,0}};
+
+int instructions_duration = 0;
+int trial_duration = 0;
+int fixation_duration = 0;
+int feedback_duration = 0;												
+int please_respond_duration = 0;
+
+string version = "1"; # 1 (upper left + lower right) or 2 (lower left + upper right) image positions
+
+PreTest1:
+
+string experiment_type = "PreTest1";
+int num_blocks = 2;
+array <int> num_trials[num_blocks] = {50,50};
+array <double> feedback_accuracy[num_blocks] = {1.0, 1.0};  	
+array <int> pass_criteria[num_blocks][2] = {{9,10},{9,10}};
+
+int instructions_duration = 2500;
+int trial_duration = 2500;
+int fixation_duration = 500;
+int feedback_duration = 1000;												
+int please_respond_duration = 1000;
+
+string version = "1"; # 1 (upper left + lower right) or 2 (lower left + upper right) image positions
+
+PreTest2:
+
+string experiment_type = "PreTest2";
+int num_blocks = 2;
+array <int> num_trials[num_blocks] = {50,50};
+array <double> feedback_accuracy[num_blocks] = {0.85, 0.85};  	
+array <int> pass_criteria[num_blocks][2] = {{12,12},{12,12}};
+
+int instructions_duration = 2500;
+int trial_duration = 2500;
+int fixation_duration = 500;
+int feedback_duration = 1000;												
+int please_respond_duration = 1000;
+
+string version = "1"; # 1 (upper left + lower right) or 2 (lower left + upper right) image positions
+
+Task:
+
+string experiment_type = "Task";
+int num_blocks = 2;
+array <int> num_trials[num_blocks] = {50,50};
+array <double> feedback_accuracy[num_blocks] = {0.8, 0.8};  	
+array <int> pass_criteria[num_blocks][2] = {{8,10},{8,10}};
+
+int instructions_duration = 2500;
+int trial_duration = 2500;
+int fixation_duration = 500;
+int feedback_duration = 1000;												
+int please_respond_duration = 1000;
+
+string version = "1"; # 1 (upper left + lower right) or 2 (lower left + upper right) image positions
