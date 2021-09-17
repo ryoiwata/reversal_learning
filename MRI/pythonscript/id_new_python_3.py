@@ -1,8 +1,7 @@
 '''This script is used to generate the input for scanner version of ALL ED movie.
 '''
 from time import *
-from random import *
-import math
+import random 
 #Possible combination of ED and ID
 MainList = ["L","R","T", "C", "B","W"]
 lr = ["L", "R"]
@@ -73,21 +72,24 @@ def checkApproxMovingAverage(inList, group):
 		groupStr = "Passed moving avg. " + str(group)
 		#oFile.write("\n" + "Passed moving avg. " + repr(group) +"\n")
 	return rtnVal
-def makeCriteriaList():
-	ed = [4] * 17 + [5] * 8 + [6] * 8
-	done = 0
-	tmpED = ed[:]
-	while(done==0):
-		shuffle(tmpED)
-		if ( checkApproxMovingAverage(tmpED, 8) ):
-		#or checkApproxMovingAverage(tmpED, 16) or checkApproxMovingAverage(tmpED, 20) ):
-			done = 1
-		else:
-			tmpED = ed[:]
-	print(tmpED)
-	return tmpED
 
-	return outList
+def make_criteria_list(list_of_numbers=None, number_of_groups=8):
+    """
+    Makes a criteria list based on shuffling a list of numbers 
+    until the correct number of numbers in each contigous element
+    
+    Parameters
+    ----------
+    number_of_groups: int
+    """
+    
+    if list_of_numbers is None:
+        list_of_numbers = [4] * 17 + [5] * 8 + [6] * 8
+    
+    while not checkApproxMovingAverage(list_of_numbers, number_of_groups):    
+        random.shuffle(list_of_numbers)
+    return list_of_numbers 
+
 def main(count=1):
 	oFile = openOutFile()
 	oFile.write("\n" + ctime() + "\n")
@@ -96,9 +98,9 @@ def main(count=1):
 		for i in range(count):
 			'''
 			stmList = makeInputStim()
-			criteriaList = makeCriteriaList()
+			criteriaList = make_criteria_list()
 			'''
-			criteriaList = makeCriteriaList()
+			criteriaList = make_criteria_list()
 			oFile.write(groupStr + "\n")
 			oFile.write("\n" + repr(criteriaList)+"\n")
 	finally:
