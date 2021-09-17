@@ -51,28 +51,40 @@ def testExactMovingAverage(inList, group):
 	else:
 		print i
 	return rtnVal
-def checkApproxMovingAverage(inList, group):
-	'''Check if every 12 contiguous elemets have 50% of 4, and 25% of 5 and 6
-	'''
-	#print "moving avg. ", group
-	global groupStr
+def checkApproxMovingAverage(list_of_numbers, number_of_groups=8):
+	"""
+    Check if every 12 contiguous elemets have 50% of 4, and 25% of 5 and 6
+    
+    Parameters
+    ----------
+    list_of_numbers: list
+    
+    number_of_groups: int
+		Can be either 8, 16, or 20
+	"""
+	# TODO: See if it is necessary to make groupStr global
+
 	rtnVal = True
-	pct50 = group/2
-	pct25 = group/4
-	for i in range(len(inList)-group):
-		myList = inList[i:(group+i)]
-		if( (myList.count(4) - pct50) in [-1, 0, 1]): # One more or less is accepted in the group
-			if( (myList.count(5) - pct25) in [-1, 0, 1] ):
-				if( (myList.count(6) - pct25) in [-1, 0, 1] ):
-				 	pass
-		else:
+	percentile_50th = number_of_groups//2
+	percentile_25th = number_of_groups//4
+	print(percentile_25th)
+	print(percentile_25th)
+    
+	for i in range(len(list_of_numbers)-number_of_groups):
+		slice_of_list_of_numbers = list_of_numbers[i:(number_of_groups+i)]
+		print(slice_of_list_of_numbers)
+		if abs(slice_of_list_of_numbers.count(4) - percentile_50th) > 1 or \
+        abs(slice_of_list_of_numbers.count(5) - percentile_25th) > 1 or \
+        abs(slice_of_list_of_numbers.count(6) - percentile_25th) > 1:
+			print(slice_of_list_of_numbers.count(4))
+        	print(slice_of_list_of_numbers.count(5))
+        	print(slice_of_list_of_numbers.count(6))
+        	break
 			rtnVal = False
 			break
-	if(rtnVal == True):
-		print "Passed moving avg. ", group
-		groupStr = "Passed moving avg. " + str(group)
-		#oFile.write("\n" + "Passed moving avg. " + repr(group) +"\n")
 	return rtnVal
+
+
 def makeCriteriaList():
 	ed = [4] * 17 + [5] * 8 + [6] * 8
 	done = 0
