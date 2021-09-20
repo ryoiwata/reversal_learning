@@ -51,69 +51,65 @@ def calculate_moving_averages(list_of_numbers, number_per_group=8):
         list_of_averages.append(ordered_number_of_numbers)
     return list_of_averages
 
-def check_moving_average_is_close(list_of_numbers, number_per_group=8):
-	"""
-    Check if every 12 contiguous elemets have 50% of 4, and 25% of 5 and 6
+def check_moving_average_is_close(list_of_numbers, number_per_group=8, number_to_ratio_dict=None):
+    """
+    Check if every n-number of elements have 50% of 4, and 25% of 5 and 6
     
     Parameters
     ----------
     list_of_numbers: list
     
     number_per_group: int
-		Can be either 8, 16, or 20
-	"""
-	# TODO: Update function so that you can change the numbers and the ratios
-	percentile_50th = number_per_group//2
-	percentile_25th = number_per_group//4
-# 	print("25th: ", percentile_25th)
-# 	print("50th: ", percentile_50th)
+        8, 12, 16, or 20 is recommended
+        
+    number_to_ratio_dict: dict 
+    """
+    if number_to_ratio_dict is None:
+        number_to_ratio_dict = {4:0.5, 5:0.25, 6:0.25}
     
-	for i in range(len(list_of_numbers)-number_per_group):
-		slice_of_list_of_numbers = list_of_numbers[i:(number_per_group+i)]
-# 		print(slice_of_list_of_numbers)
-		# checks to see if the difference of the number for each number
-		# is less than the chosen percentile 
-		if abs(slice_of_list_of_numbers.count(4) - percentile_50th) > 1 or \
-        abs(slice_of_list_of_numbers.count(5) - percentile_25th) > 1 or \
-        abs(slice_of_list_of_numbers.count(6) - percentile_25th) > 1:
-# 			print("4: ", slice_of_list_of_numbers.count(4))
-# 			print("5: ", slice_of_list_of_numbers.count(5))
-# 			print("6: ", slice_of_list_of_numbers.count(6))
-			return False
-			break
-	return True 
+    number_per_group_dict = {}
+    for key, value in number_to_ratio_dict.items():
+        # calculating the number of number needed for each key
+        number_per_group_dict[key] = number_per_group * value
+    
+    for i in range(len(list_of_numbers)-number_per_group):
+        slice_of_list_of_numbers = list_of_numbers[i:(number_per_group+i)]
+        # checks to see if the difference of the number for each number
+        # is less than the chosen percentile 
+        for key, value in number_per_group_dict.items():
+            if abs(slice_of_list_of_numbers.count(key) - value) > 1:
+                return False
+    return True
 
-def check_moving_average_is_exact(list_of_numbers, number_per_group=8):
-	"""
-    Check if every 12 contiguous elemets have 50% of 4, and 25% of 5 and 6
+def check_moving_average_is_exact(list_of_numbers, number_per_group=8, number_to_ratio_dict=None):
+    """
+    Check if every n-number of elements have 50% of 4, and 25% of 5 and 6
     
     Parameters
     ----------
     list_of_numbers: list
     
     number_per_group: int
-		Can be either 8, 16, or 20
-	"""
-	# TODO: Update function so that you can change the numbers and the ratios
-
-	percentile_50th = number_per_group//2
-	percentile_25th = number_per_group//4
-# 	print("25th: ", percentile_25th)
-# 	print("50th: ", percentile_50th)
+        8, 12, 16, or 20 is recommended
+        
+    number_to_ratio_dict: dict 
+    """
+    if number_to_ratio_dict is None:
+        number_to_ratio_dict = {4:0.5, 5:0.25, 6:0.25}
     
-	for i in range(len(list_of_numbers)-number_per_group):
-		slice_of_list_of_numbers = list_of_numbers[i:(number_per_group+i)]
-# 		print(slice_of_list_of_numbers)
-		# checks to see if the difference of the number for each number
-		# is less than the chosen percentile 
-		if abs(slice_of_list_of_numbers.count(4) - percentile_50th) >= 1 or \
-        abs(slice_of_list_of_numbers.count(5) - percentile_25th) >= 1 or \
-        abs(slice_of_list_of_numbers.count(6) - percentile_25th) >= 1:
-# 			print("4: ", slice_of_list_of_numbers.count(4))
-# 			print("5: ", slice_of_list_of_numbers.count(5))
-# 			print("6: ", slice_of_list_of_numbers.count(6))
-			return False
-	return True
+    number_per_group_dict = {}
+    for key, value in number_to_ratio_dict.items():
+        # calculating the number of number needed for each key
+        number_per_group_dict[key] = number_per_group * value
+    
+    for i in range(len(list_of_numbers)-number_per_group):
+        slice_of_list_of_numbers = list_of_numbers[i:(number_per_group+i)]
+        # checks to see if the difference of the number for each number
+        # is less than the chosen percentile 
+        for key, value in number_per_group_dict.items():
+            if abs(slice_of_list_of_numbers.count(key) - value) >= 1:
+                return False
+    return True
 
 def make_close_criteria_list(list_of_numbers=None, number_per_group=8):
     """
@@ -129,7 +125,7 @@ def make_close_criteria_list(list_of_numbers=None, number_per_group=8):
     """
     
     if list_of_numbers is None:
-        list_of_numbers = [4] * 17 + [5] * 8 + [6] * 8
+        list_of_numbers = [4] * 16 + [5] * 8 + [6] * 8
     # Continues to shuffle numbers until each 12 number slice 
 	# Has the correct number of each number
     while not check_moving_average_is_close(list_of_numbers, number_per_group):    
@@ -150,7 +146,7 @@ def make_exact_criteria_list(list_of_numbers=None, number_per_group=8):
     """
     
     if list_of_numbers is None:
-        list_of_numbers = [4] * 17 + [5] * 8 + [6] * 8
+        list_of_numbers = [4] * 16 + [5] * 8 + [6] * 8
     # Continues to shuffle numbers until each 12 number slice 
 	# Has the correct number of each number
     while not check_moving_average_is_exact(list_of_numbers, number_per_group):    
@@ -171,6 +167,7 @@ if __name__ == "__main__":
 	output_file = open(args.output_file, 'a');
 	output_file.write("\n" + datetime.datetime.now() + "\n")
 	
+	# TODO: Fix try finally 
 	try:
 		global groupStr
 		for i in range(count):
