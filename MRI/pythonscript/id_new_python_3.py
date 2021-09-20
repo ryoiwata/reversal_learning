@@ -4,6 +4,7 @@ from time import *
 import random 
 import argparse
 import datetime
+import collections 
 
 #Possible combination of ED and ID
 MAINLIST = ["L","R","T", "C", "B","W"]
@@ -22,42 +23,33 @@ def check_if_neighbor_item_is_different(input_list):
     input_list: list
 	"""
 	for i in range(len(input_list)-1):
+		# Comparing each item and the item after
 		if (input_list[i] == input_list[i+1]):
 			return False
 			break
 	return True
 
-def check_moving_average_is_exact(list_of_numbers, number_per_group=8):
-	"""
-    Check if every 12 contiguous elemets have 50% of 4, and 25% of 5 and 6
-    
+def calculate_moving_averages(list_of_numbers, number_per_group=8):
+    """
+    Count the number of numbers for each group within a list of numbers
+
     Parameters
     ----------
     list_of_numbers: list
-    
-    number_per_group: int
-		Can be either 8, 16, or 20
-	"""
-	# TODO: Update function so that you can change the numbers and the ratios
 
-	percentile_50th = number_per_group//2
-	percentile_25th = number_per_group//4
-# 	print("25th: ", percentile_25th)
-# 	print("50th: ", percentile_50th)
-    
-	for i in range(len(list_of_numbers)-number_per_group):
-		slice_of_list_of_numbers = list_of_numbers[i:(number_per_group+i)]
-# 		print(slice_of_list_of_numbers)
-		# checks to see if the difference of the number for each number
-		# is less than the chosen percentile 
-		if abs(slice_of_list_of_numbers.count(4) - percentile_50th) >= 1 or \
-        abs(slice_of_list_of_numbers.count(5) - percentile_25th) >= 1 or \
-        abs(slice_of_list_of_numbers.count(6) - percentile_25th) >= 1:
-# 			print("4: ", slice_of_list_of_numbers.count(4))
-# 			print("5: ", slice_of_list_of_numbers.count(5))
-# 			print("6: ", slice_of_list_of_numbers.count(6))
-			return False
-	return True
+    number_per_group: int
+        Can be either 8, 16, or 20
+    """
+    list_of_averages = []
+    # iterating through each group that has the length of number_per_group
+	for i in range(len(list_of_numbers) - number_per_group):
+        slice_of_list_of_numbers = list_of_numbers[i:i + number_per_group)]
+        # counting the number of number in each group
+		number_of_numbers = collections.Counter(slice_of_list_of_numbers)
+        # sorting the dictionary so that the keys are in the same order
+		ordered_number_of_numbers = collections.OrderedDict(sorted(number_of_numbers.items()))
+        list_of_averages.append(ordered_number_of_numbers)
+    return list_of_averages
 
 def check_moving_average_is_close(list_of_numbers, number_per_group=8):
 	"""
@@ -90,6 +82,38 @@ def check_moving_average_is_close(list_of_numbers, number_per_group=8):
 			return False
 			break
 	return True 
+
+def check_moving_average_is_exact(list_of_numbers, number_per_group=8):
+	"""
+    Check if every 12 contiguous elemets have 50% of 4, and 25% of 5 and 6
+    
+    Parameters
+    ----------
+    list_of_numbers: list
+    
+    number_per_group: int
+		Can be either 8, 16, or 20
+	"""
+	# TODO: Update function so that you can change the numbers and the ratios
+
+	percentile_50th = number_per_group//2
+	percentile_25th = number_per_group//4
+# 	print("25th: ", percentile_25th)
+# 	print("50th: ", percentile_50th)
+    
+	for i in range(len(list_of_numbers)-number_per_group):
+		slice_of_list_of_numbers = list_of_numbers[i:(number_per_group+i)]
+# 		print(slice_of_list_of_numbers)
+		# checks to see if the difference of the number for each number
+		# is less than the chosen percentile 
+		if abs(slice_of_list_of_numbers.count(4) - percentile_50th) >= 1 or \
+        abs(slice_of_list_of_numbers.count(5) - percentile_25th) >= 1 or \
+        abs(slice_of_list_of_numbers.count(6) - percentile_25th) >= 1:
+# 			print("4: ", slice_of_list_of_numbers.count(4))
+# 			print("5: ", slice_of_list_of_numbers.count(5))
+# 			print("6: ", slice_of_list_of_numbers.count(6))
+			return False
+	return True
 
 def make_close_criteria_list(list_of_numbers=None, number_per_group=8):
     """
