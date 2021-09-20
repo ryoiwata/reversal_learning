@@ -111,7 +111,7 @@ def check_moving_average_is_exact(list_of_numbers, number_per_group=8, number_to
                 return False
     return True
 
-def make_close_criteria_list(list_of_numbers=None, number_per_group=8):
+def make_close_criteria_list(list_of_numbers=None, number_per_group=8, number_to_ratio_dict=None):
     """
     Makes a criteria list based on shuffling a list of numbers 
     until the correct number of numbers in each contigous element
@@ -126,13 +126,18 @@ def make_close_criteria_list(list_of_numbers=None, number_per_group=8):
     
     if list_of_numbers is None:
         list_of_numbers = [4] * 16 + [5] * 8 + [6] * 8
+
+    if number_to_ratio_dict is None:
+        number_to_ratio_dict = {4:0.5, 5:0.25, 6:0.25}
+	
     # Continues to shuffle numbers until each 12 number slice 
 	# Has the correct number of each number
-    while not check_moving_average_is_close(list_of_numbers, number_per_group):    
+    while not check_moving_average_is_close(list_of_numbers=list_of_numbers, \
+		number_per_group=number_per_group, number_to_ratio_dict=number_to_ratio_dict):    
         random.shuffle(list_of_numbers)
     return list_of_numbers 
 
-def make_exact_criteria_list(list_of_numbers=None, number_per_group=8):
+def make_exact_criteria_list(list_of_numbers=None, number_per_group=8, number_to_ratio_dict=None):
     """
     Makes a criteria list based on shuffling a list of numbers 
     until the correct number of numbers in each contigous element
@@ -147,9 +152,14 @@ def make_exact_criteria_list(list_of_numbers=None, number_per_group=8):
     
     if list_of_numbers is None:
         list_of_numbers = [4] * 16 + [5] * 8 + [6] * 8
+
+    if number_to_ratio_dict is None:
+        number_to_ratio_dict = {4:0.5, 5:0.25, 6:0.25}
+	
     # Continues to shuffle numbers until each 12 number slice 
 	# Has the correct number of each number
-    while not check_moving_average_is_exact(list_of_numbers, number_per_group):    
+    while not check_moving_average_is_exact(list_of_numbers=list_of_numbers, \
+		number_per_group=number_per_group, number_to_ratio_dict=number_to_ratio_dict):    
         random.shuffle(list_of_numbers)
     return list_of_numbers 
 
