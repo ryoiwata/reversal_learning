@@ -6,14 +6,12 @@ import argparse
 import datetime
 
 #Possible combination of ED and ID
-MainList = ["L","R","T", "C", "B","W"]
-lr = ["L", "R"]
-tc = ["T", "C"]
-bw = ["B", "W"]
-ed_num = 22
-id_num = 10
-global groupStr
-
+MAINLIST = ["L","R","T", "C", "B","W"]
+LR = ["L", "R"]
+TC = ["T", "C"]
+BW = ["B", "W"]
+ED_NUM = 22
+ID_NUM = 10
 
 def check_if_neighbor_item_is_different(input_list):
 	"""
@@ -29,28 +27,7 @@ def check_if_neighbor_item_is_different(input_list):
 			break
 	return True
 
-def testExactMovingAverage(list_of_numbers, group):
-	'''Test if the moving average is exact for the group
-	'''
-	average_is_valid = True
-	percentile_50th = group/2
-	percentile_25th = group/4
-	for i in range(len(list_of_numbers)-group):
-		slice_of_list_of_numbers = list_of_numbers[i:(group+i)]
-		if( (slice_of_list_of_numbers.count(4) - percentile_50th) == 0 ):
-			if( (slice_of_list_of_numbers.count(5) - percentile_25th) == 0 ):
-				if( (slice_of_list_of_numbers.count(6) - percentile_25th) == 0 ):
-				 	pass
-		else:
-			average_is_valid = False
-			break
-	if(average_is_valid == True):
-		print("PASSED - moving avg. ", group, " : " , list_of_numbers)
-	else:
-		print(i)
-	return average_is_valid
-
-def check_moving_average(list_of_numbers, number_per_group=8):
+def check_moving_average_is_exact(list_of_numbers, number_per_group=8):
 	"""
     Check if every 12 contiguous elemets have 50% of 4, and 25% of 5 and 6
     
@@ -63,7 +40,37 @@ def check_moving_average(list_of_numbers, number_per_group=8):
 	"""
 	# TODO: Update function so that you can change the numbers and the ratios
 
-	average_is_valid = True
+	percentile_50th = number_per_group//2
+	percentile_25th = number_per_group//4
+# 	print("25th: ", percentile_25th)
+# 	print("50th: ", percentile_50th)
+    
+	for i in range(len(list_of_numbers)-number_per_group):
+		slice_of_list_of_numbers = list_of_numbers[i:(number_per_group+i)]
+# 		print(slice_of_list_of_numbers)
+		# checks to see if the difference of the number for each number
+		# is less than the chosen percentile 
+		if abs(slice_of_list_of_numbers.count(4) - percentile_50th) >= 1 or \
+        abs(slice_of_list_of_numbers.count(5) - percentile_25th) >= 1 or \
+        abs(slice_of_list_of_numbers.count(6) - percentile_25th) >= 1:
+# 			print("4: ", slice_of_list_of_numbers.count(4))
+# 			print("5: ", slice_of_list_of_numbers.count(5))
+# 			print("6: ", slice_of_list_of_numbers.count(6))
+			return False
+	return True
+
+def check_moving_average_is_close(list_of_numbers, number_per_group=8):
+	"""
+    Check if every 12 contiguous elemets have 50% of 4, and 25% of 5 and 6
+    
+    Parameters
+    ----------
+    list_of_numbers: list
+    
+    number_per_group: int
+		Can be either 8, 16, or 20
+	"""
+	# TODO: Update function so that you can change the numbers and the ratios
 	percentile_50th = number_per_group//2
 	percentile_25th = number_per_group//4
 # 	print("25th: ", percentile_25th)
@@ -80,11 +87,11 @@ def check_moving_average(list_of_numbers, number_per_group=8):
 # 			print("4: ", slice_of_list_of_numbers.count(4))
 # 			print("5: ", slice_of_list_of_numbers.count(5))
 # 			print("6: ", slice_of_list_of_numbers.count(6))
-			average_is_valid = False
+			return False
 			break
-	return average_is_valid
+	return True 
 
-def make_criteria_list(list_of_numbers=None, number_per_group=8):
+def make_close_criteria_list(list_of_numbers=None, number_per_group=8):
     """
     Makes a criteria list based on shuffling a list of numbers 
     until the correct number of numbers in each contigous element
@@ -101,11 +108,30 @@ def make_criteria_list(list_of_numbers=None, number_per_group=8):
         list_of_numbers = [4] * 17 + [5] * 8 + [6] * 8
     # Continues to shuffle numbers until each 12 number slice 
 	# Has the correct number of each number
-    while not check_moving_average(list_of_numbers, number_per_group):    
+    while not check_moving_average_is_close(list_of_numbers, number_per_group):    
         random.shuffle(list_of_numbers)
     return list_of_numbers 
 
-
+def make_exact_criteria_list(list_of_numbers=None, number_per_group=8):
+    """
+    Makes a criteria list based on shuffling a list of numbers 
+    until the correct number of numbers in each contigous element
+    
+    Parameters
+    ----------
+    list_of_numbers: list
+	
+	number_per_group: int
+		Can be either 8, 16, or 20
+    """
+    
+    if list_of_numbers is None:
+        list_of_numbers = [4] * 17 + [5] * 8 + [6] * 8
+    # Continues to shuffle numbers until each 12 number slice 
+	# Has the correct number of each number
+    while not check_moving_average_is_exact(list_of_numbers, number_per_group):    
+        random.shuffle(list_of_numbers)
+    return list_of_numbers 
 
 if __name__ == "__main__":
 	# TODO: Add Argparse description
