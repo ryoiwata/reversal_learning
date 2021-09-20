@@ -2,6 +2,9 @@
 '''
 from time import *
 import random 
+import argparse
+import datetime
+
 #Possible combination of ED and ID
 MainList = ["L","R","T", "C", "B","W"]
 lr = ["L", "R"]
@@ -10,15 +13,7 @@ bw = ["B", "W"]
 ed_num = 22
 id_num = 10
 global groupStr
-#outFile = open("out_new.txt", 'a')
-def openOutFile():
-	'''Open a file to write output
-	'''
-	try:
-		outFile = open("ed_out_new.txt", 'a');
-		return outFile
-	except:
-		print("output file coule not be opened!!")
+
 
 def checkTwoNearest(tempList):
 	''' Two nearest elements in the list should be different
@@ -106,9 +101,22 @@ def make_criteria_list(list_of_numbers=None, number_per_group=8):
         random.shuffle(list_of_numbers)
     return list_of_numbers 
 
-def main(count=1):
-	oFile = openOutFile()
-	oFile.write("\n" + ctime() + "\n")
+
+
+if __name__ == "__main__":
+	# TODO: Add Argparse description
+	parser = argparse.ArgumentParser(description='')
+	parser.add_argument('output_file', type=str,
+			            help='path to output file', 
+						action='store', default='./ed_out_new.txt')
+
+
+	# Execute the parse_args() method
+	args = my_parser.parse_args()
+	
+	output_file = open(args.output_file, 'a');
+	output_file.write("\n" + datetime.datetime.now() + "\n")
+	
 	try:
 		global groupStr
 		for i in range(count):
