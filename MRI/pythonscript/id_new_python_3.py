@@ -15,15 +15,19 @@ id_num = 10
 global groupStr
 
 
-def checkTwoNearest(tempList):
-	''' Two nearest elements in the list should be different
-	'''
-	rtnVal = True
-	for i in range(len(tempList)-1):
-		if (tempList[i] == tempList[i+1]):
-			rtnVal = False
+def check_if_neighbor_item_is_different(input_list):
+	"""
+    Checks if the item before and after each item is different
+    
+    Parameters
+    ----------
+    input_list: list
+	"""
+	for i in range(len(input_list)-1):
+		if (input_list[i] == input_list[i+1]):
+			return False
 			break
-	return rtnVal
+	return True
 
 def testExactMovingAverage(list_of_numbers, group):
 	'''Test if the moving average is exact for the group
