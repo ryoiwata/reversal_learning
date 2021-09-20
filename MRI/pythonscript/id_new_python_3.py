@@ -15,19 +15,19 @@ ED_NUM = 22
 ID_NUM = 10
 
 def check_if_neighbor_item_is_different(input_list):
-	"""
+    """
     Checks if the item before and after each item is different
     
     Parameters
     ----------
     input_list: list
-	"""
-	for i in range(len(input_list)-1):
-		# Comparing each item and the item after
-		if (input_list[i] == input_list[i+1]):
-			return False
-			break
-	return True
+    """
+    for i in range(len(input_list)-1):
+        # Comparing each item and the item after
+        if (input_list[i] == input_list[i+1]):
+            return False
+            break
+    return True
 
 def calculate_moving_averages(list_of_numbers, number_per_group=8):
     """
@@ -42,12 +42,12 @@ def calculate_moving_averages(list_of_numbers, number_per_group=8):
     """
     list_of_averages = []
     # iterating through each group that has the length of number_per_group
-	for i in range(len(list_of_numbers) - number_per_group):
+    for i in range(len(list_of_numbers) - number_per_group):
         slice_of_list_of_numbers = list_of_numbers[i:i + number_per_group)]
         # counting the number of number in each group
-		number_of_numbers = collections.Counter(slice_of_list_of_numbers)
+        number_of_numbers = collections.Counter(slice_of_list_of_numbers)
         # sorting the dictionary so that the keys are in the same order
-		ordered_number_of_numbers = collections.OrderedDict(sorted(number_of_numbers.items()))
+        ordered_number_of_numbers = collections.OrderedDict(sorted(number_of_numbers.items()))
         list_of_averages.append(ordered_number_of_numbers)
     return list_of_averages
 
@@ -119,9 +119,9 @@ def make_close_criteria_list(list_of_numbers=None, number_per_group=8, number_to
     Parameters
     ----------
     list_of_numbers: list
-	
-	number_per_group: int
-		Can be either 8, 16, or 20
+    
+    number_per_group: int
+        Can be either 8, 16, or 20
     """
     
     if list_of_numbers is None:
@@ -129,11 +129,11 @@ def make_close_criteria_list(list_of_numbers=None, number_per_group=8, number_to
 
     if number_to_ratio_dict is None:
         number_to_ratio_dict = {4:0.5, 5:0.25, 6:0.25}
-	
+    
     # Continues to shuffle numbers until each 12 number slice 
-	# Has the correct number of each number
+    # Has the correct number of each number
     while not check_moving_average_is_close(list_of_numbers=list_of_numbers, \
-		number_per_group=number_per_group, number_to_ratio_dict=number_to_ratio_dict):    
+        number_per_group=number_per_group, number_to_ratio_dict=number_to_ratio_dict):    
         random.shuffle(list_of_numbers)
     return list_of_numbers 
 
@@ -145,9 +145,9 @@ def make_exact_criteria_list(list_of_numbers=None, number_per_group=8, number_to
     Parameters
     ----------
     list_of_numbers: list
-	
-	number_per_group: int
-		Can be either 8, 16, or 20
+    
+    number_per_group: int
+        Can be either 8, 16, or 20
     """
     
     if list_of_numbers is None:
@@ -155,38 +155,38 @@ def make_exact_criteria_list(list_of_numbers=None, number_per_group=8, number_to
 
     if number_to_ratio_dict is None:
         number_to_ratio_dict = {4:0.5, 5:0.25, 6:0.25}
-	
+    
     # Continues to shuffle numbers until each 12 number slice 
-	# Has the correct number of each number
+    # Has the correct number of each number
     while not check_moving_average_is_exact(list_of_numbers=list_of_numbers, \
-		number_per_group=number_per_group, number_to_ratio_dict=number_to_ratio_dict):    
+        number_per_group=number_per_group, number_to_ratio_dict=number_to_ratio_dict):    
         random.shuffle(list_of_numbers)
     return list_of_numbers 
 
 if __name__ == "__main__":
-	# TODO: Add Argparse description
-	parser = argparse.ArgumentParser(description='')
-	parser.add_argument('output_file', type=str,
-			            help='path to output file', 
-						action='store', default='./ed_out_new.txt')
+    # TODO: Add Argparse description
+    parser = argparse.ArgumentParser(description='')
+    parser.add_argument('output_file', type=str,
+                        help='path to output file', 
+                        action='store', default='./ed_out_new.txt')
 
 
-	# Execute the parse_args() method
-	args = my_parser.parse_args()
-	
-	output_file = open(args.output_file, 'a');
-	output_file.write("\n" + datetime.datetime.now() + "\n")
-	
-	# TODO: Fix try finally 
-	try:
-		global groupStr
-		for i in range(count):
-			'''
-			stmList = makeInputStim()
-			criteriaList = make_criteria_list()
-			'''
-			criteriaList = make_criteria_list()
-			oFile.write(groupStr + "\n")
-			oFile.write("\n" + repr(criteriaList)+"\n")
-	finally:
-		oFile.close()
+    # Execute the parse_args() method
+    args = my_parser.parse_args()
+    
+    output_file = open(args.output_file, 'a');
+    output_file.write("\n" + datetime.datetime.now() + "\n")
+    
+    # TODO: Fix try finally 
+    try:
+        global groupStr
+        for i in range(count):
+            '''
+            stmList = makeInputStim()
+            criteriaList = make_criteria_list()
+            '''
+            criteriaList = make_criteria_list()
+            oFile.write(groupStr + "\n")
+            oFile.write("\n" + repr(criteriaList)+"\n")
+    finally:
+        oFile.close()
