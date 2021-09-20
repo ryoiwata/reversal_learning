@@ -43,7 +43,7 @@ def calculate_moving_averages(list_of_numbers, number_per_group=8):
     list_of_averages = []
     # iterating through each group that has the length of number_per_group
     for i in range(len(list_of_numbers) - number_per_group):
-        slice_of_list_of_numbers = list_of_numbers[i:i + number_per_group)]
+        slice_of_list_of_numbers = list_of_numbers[i:i + number_per_group]
         # counting the number of number in each group
         number_of_numbers = collections.Counter(slice_of_list_of_numbers)
         # sorting the dictionary so that the keys are in the same order

@@ -23,6 +23,8 @@ def openOutFile():
 		return outFile
 	except:
 		print "output file coule not be opened!!"
+
+# TODO: Create a new version or refactor
 def checkNearest(inList, lkpList, num):
 	'''Check the nearest elements for maximum allowed equals 'num'
 	'''
@@ -90,15 +92,16 @@ def checkApproxMovingAverage(inList, group, myLkpList, highestNumInList):
 		print "Passed moving avg. ", group
 		groupStr = "Passed moving avg. " + str(group)
 	return rtnVal
+
+# TODO: Create a new version or refactor
+# TODO: Find where Stimlist is from
 def makeInputStim():
 	tmpList = [] + StimList * 10
-	done = 0
-	while(done==0):
+	while(True):
 		shuffle(tmpList)
 		if ( checkNearest(tmpList, StimList, 1) == True ):
 		#or checkApproxMovingAverage(tmpED, 16) or checkApproxMovingAverage(tmpED, 20) ):
-			done = 1
-	print tmpList
+			break
 	return tmpList
 
 def makeCriteriaList():
