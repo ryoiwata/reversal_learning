@@ -1,18 +1,13 @@
-'''This script is used to generate the input for scanner version of ALL ED movie.
-'''
+"""
+Example Commands:
+    python .\MRI\pythonscript\id_new_python_3.py --list_of_numbers 4 6 5 4 4 4 5 6 6 4 4 4 5 4 5 6 6 4 4 5 4 5 6 5 4 6 4 5 4 6 4 4
+    python .\MRI\pythonscript\id_new_python_3.py --number_to_ratio_dict 5=0.25, 4=0.5, 6=0.25
+"""
 from time import *
 import random 
 import argparse
 import datetime
 import collections 
-
-#Possible combination of ED and ID
-MAINLIST = ["L","R","T", "C", "B","W"]
-LR = ["L", "R"]
-TC = ["T", "C"]
-BW = ["B", "W"]
-ED_NUM = 22
-ID_NUM = 10
 
 def check_if_neighbor_item_is_different(input_list):
     """
@@ -167,18 +162,28 @@ def make_exact_criteria_list(list_of_numbers=None, number_per_group=8, number_to
 
 class ParseKwargs(argparse.Action):
     """
+    Class that overrides the __call__ method in argparse.Action 
+    so that we can parse out key, value pairs. Each key and value pair
+    needs to be seperated by a '=' and a ' ' between pairs. 
+
+    Parameters
+    ----------
+    argparse.Action: argparse Action subclass
+    
     Credit: https://sumit-ghosh.com/articles/parsing-dictionary-key-value-pairs-kwargs-argparse-python/
     """
     def __call__(self, parser, namespace, values, option_string=None):
+        # Updating namespace.dest to a dict
         setattr(namespace, self.dest, dict())
         for value in values:
+            # parsing out the key, value pair by equal sign
             key, value = value.split('=')
             # converting from string to numbers
             numerical_key, numerical_value = int(key), float(value)
+            # Updating the namespace.dest dictionary with the key, value pair
             getattr(namespace, self.dest)[numerical_key] = numerical_value
 
 if __name__ == "__main__":
-    # TODO: Make an argument for number to ratio dict
     parser = argparse.ArgumentParser(description='Creates a list of numbers that has every n-number of slices with the same ratio of numbers')
     parser.add_argument('--output_file', type=str,
                         action='store', default="./ed_out_new.txt",
@@ -191,16 +196,19 @@ if __name__ == "__main__":
                         help='number of times to make a criteria list')
 
     parser.add_argument('--number_per_group', type=int,
-                    action='store', default=8,
-                    nargs="?", const=8,
-                    help='number of numbers for each slice')
+                        action='store', default=8,
+                        nargs="?", const=8,
+                        help='number of numbers for each slice')
 
     parser.add_argument('--list_of_numbers', type=int,
-                    action='store', default=None,
-                    nargs="+", help='List of numbers to make a criteria list from')
+                        action='store', default=None,
+                        nargs="+", help='List of numbers to make a criteria list from')
 
     parser.add_argument('--number_to_ratio_dict', nargs='*', 
-                    action=ParseKwargs, default=None)
+                        action=ParseKwargs, default=None,
+                        help="The number to the ratio of the number in each slice. \
+                        Make sure that the key and value is seperated by an '='\
+                        and each pair by a ' ', space")
 
     args = parser.parse_args()
 
@@ -208,15 +216,8 @@ if __name__ == "__main__":
     output_file.write(str(datetime.datetime.now()) + "\n")
 
     for i in range(args.count):
-            '''
-            stmList = makeInputStim()
-            criteria_list = make_criteria_list()
-            '''
-            criteria_list = make_close_criteria_list(list_of_numbers=args.list_of_numbers, \
-                number_per_group=args.number_per_group, number_to_ratio_dict=args.number_to_ratio_dict)
-            output_file.write(str(criteria_list) + "\n")
+        criteria_list = make_close_criteria_list(list_of_numbers=args.list_of_numbers, \
+            number_per_group=args.number_per_group, number_to_ratio_dict=args.number_to_ratio_dict)
+        output_file.write(str(criteria_list) + "\n")
 
     output_file.close()
-
-    # python .\MRI\pythonscript\id_new_python_3.py --list_of_numbers 4 6 5 4 4 4 5 6 6 4 4 4 5 4 5 6 6 4 4 5 4 5 6 5 4 6 4 5 4 6 4 4
-    # python .\MRI\pythonscript\id_new_python_3.py --number_to_ratio_dict 5=0.25, 4=0.5, 6=0.25
