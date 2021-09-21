@@ -126,7 +126,8 @@ def make_close_criteria_list(list_of_numbers=None, number_per_group=8, number_to
     
     if list_of_numbers is None:
         list_of_numbers = [4] * 16 + [5] * 8 + [6] * 8
-
+    random.shuffle(list_of_numbers)
+    
     if number_to_ratio_dict is None:
         number_to_ratio_dict = {4:0.5, 5:0.25, 6:0.25}
     
@@ -152,6 +153,7 @@ def make_exact_criteria_list(list_of_numbers=None, number_per_group=8, number_to
     
     if list_of_numbers is None:
         list_of_numbers = [4] * 16 + [5] * 8 + [6] * 8
+    random.shuffle(list_of_numbers)
 
     if number_to_ratio_dict is None:
         number_to_ratio_dict = {4:0.5, 5:0.25, 6:0.25}
@@ -164,6 +166,7 @@ def make_exact_criteria_list(list_of_numbers=None, number_per_group=8, number_to
     return list_of_numbers 
 
 if __name__ == "__main__":
+    # TODO: Make an argument for number to ratio dict
     parser = argparse.ArgumentParser(description='Creates a list of numbers that has every n-number of slices with the same ratio of numbers')
     parser.add_argument('--output_file', type=str,
                         action='store', default="./ed_out_new.txt",
@@ -175,22 +178,29 @@ if __name__ == "__main__":
                         nargs="?", const=1,
                         help='number of times to make a criteria list')
 
+    parser.add_argument('--number_per_group', type=int,
+                    action='store', default=8,
+                    nargs="?", const=8,
+                    help='number of numbers for each slice')
+
+    parser.add_argument('--list_of_numbers', type=int,
+                    action='store', default=None,
+                    nargs="+", help='List of numbers to make a criteria list from')
+
     args = parser.parse_args()
 
     output_file = open(args.output_file, 'a');
     output_file.write(str(datetime.datetime.now()) + "\n")
 
-    
-    # TODO: Fix try finally 
-    try:
-        global groupStr
-        for i in range(args.count):
+    for i in range(args.count):
             '''
             stmList = makeInputStim()
             criteria_list = make_criteria_list()
             '''
-            criteria_list = make_close_criteria_list()
+            criteria_list = make_close_criteria_list(list_of_numbers=args.list_of_numbers, \
+                number_per_group=args.number_per_group)
             output_file.write(str(criteria_list) + "\n")
-            # output_file.write("\n" + repr(criteria_list)+"\n")
-    finally:
-        output_file.close()
+
+    output_file.close()
+
+    # python .\MRI\pythonscript\id_new_python_3.py --list_of_numbers 4 6 5 4 4 4 5 6 6 4 4 4 5 4 5 6 6 4 4 5 4 5 6 5 4 6 4 5 4 6 4 4
