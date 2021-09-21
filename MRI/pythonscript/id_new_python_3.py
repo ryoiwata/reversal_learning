@@ -165,6 +165,18 @@ def make_exact_criteria_list(list_of_numbers=None, number_per_group=8, number_to
         random.shuffle(list_of_numbers)
     return list_of_numbers 
 
+class ParseKwargs(argparse.Action):
+    """
+    Credit: https://sumit-ghosh.com/articles/parsing-dictionary-key-value-pairs-kwargs-argparse-python/
+    """
+    def __call__(self, parser, namespace, values, option_string=None):
+        setattr(namespace, self.dest, dict())
+        for value in values:
+            key, value = value.split('=')
+            # converting from string to numbers
+            numerical_key, numerical_value = int(key), float(value)
+            getattr(namespace, self.dest)[numerical_key] = numerical_value
+
 if __name__ == "__main__":
     # TODO: Make an argument for number to ratio dict
     parser = argparse.ArgumentParser(description='Creates a list of numbers that has every n-number of slices with the same ratio of numbers')
@@ -187,6 +199,9 @@ if __name__ == "__main__":
                     action='store', default=None,
                     nargs="+", help='List of numbers to make a criteria list from')
 
+    parser.add_argument('--number_to_ratio_dict', nargs='*', 
+                    action=ParseKwargs, default=None)
+
     args = parser.parse_args()
 
     output_file = open(args.output_file, 'a');
@@ -198,9 +213,10 @@ if __name__ == "__main__":
             criteria_list = make_criteria_list()
             '''
             criteria_list = make_close_criteria_list(list_of_numbers=args.list_of_numbers, \
-                number_per_group=args.number_per_group)
+                number_per_group=args.number_per_group, number_to_ratio_dict=args.number_to_ratio_dict)
             output_file.write(str(criteria_list) + "\n")
 
     output_file.close()
 
     # python .\MRI\pythonscript\id_new_python_3.py --list_of_numbers 4 6 5 4 4 4 5 6 6 4 4 4 5 4 5 6 6 4 4 5 4 5 6 5 4 6 4 5 4 6 4 4
+    # python .\MRI\pythonscript\id_new_python_3.py --number_to_ratio_dict 5=0.25, 4=0.5, 6=0.25
