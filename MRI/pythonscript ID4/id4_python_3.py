@@ -15,43 +15,51 @@ CriteriaList1 = [4,5,6]
 CriteriaList2 = [8,9,10]
 global groupStr
 
-def openOutFile():
-	'''Open a file to write output
-	'''
-	try:
-		outFile = open("id4.txt", 'a');
-		return outFile
-	except:
-		print("output file coule not be opened!!")
-def checkNearest(inList, lkpList, num):
-	'''Check the nearest elements for maximum allowed equals 'num'
-	'''
-#inList => List to check for the nearest items
-#lkpList=> Lookup List which has the list of items to check if that item exist more than 'num' of times in a row in inList
-#num=> Maximum number allowed to appear in inList in a row
-	for i in range(len(inList)-num):
-		for itm in lkpList:
-			if(inList[i:i+num+1].count(itm)>num):
-				return False
-	return True
-def checkTwoNearest(tempList):
-	''' Two nearest elements in the list should be different
-	'''
-	rtnVal = True
-	for i in range(len(tempList)-1):
-		if (tempList[i] == tempList[i+1]):
-			rtnVal = False
-			break
-	return rtnVal
+# TODO: Update docstring
+def check_frequency_of_number_per_slice(list_of_numbers, number_to_count=0, slice_length=1, frequency=1):
+	"""
+    Check the nearest elements for maximum allowed equals 'num'
 
-def testExactMovingAverage(inList, group):
+    Parameters
+    ----------
+    input_list: list#
+	list_of_numbers: 
+		List to check for the nearest items
+	number_to_count: 
+		Maximum number allowed to appear in list_of_numbers in a row
+    slice_length: int
+	
+	frequency: int
+
+	"""
+
+	for i in range(len(list_of_numbers) - num):
+		if list_of_numbers[i:slice_length].count(number_to_count) >= num:
+			return False
+	return True
+
+def check_if_neighbor_item_is_different(input_list):
+    """
+    Checks if the item before and after each item is different
+    
+    Parameters
+    ----------
+    input_list: list
+    """
+    for i in range(len(input_list)-1):
+        # Comparing each item and the item after
+        if (input_list[i] == input_list[i+1]):
+            return False
+    return True
+
+def testExactMovingAverage(list_of_numbers, group):
 	'''Test if the moving average is exact for the group
 	'''
 	rtnVal = True
 	pct50 = group/2
 	pct25 = group/4
-	for i in range(len(inList)-group):
-		myList = inList[i:(group+i)]
+	for i in range(len(list_of_numbers)-group):
+		myList = list_of_numbers[i:(group+i)]
 		if( (myList.count(4) - pct50) == 0 ):
 			if( (myList.count(5) - pct25) == 0 ):
 				if( (myList.count(6) - pct25) == 0 ):
@@ -60,11 +68,11 @@ def testExactMovingAverage(inList, group):
 			rtnVal = False
 			break
 	if(rtnVal == True):
-		print("PASSED - exact moving avg. ", group, " : " , inList)
+		print("PASSED - exact moving avg. ", group, " : " , list_of_numbers)
 	else:
 		print("Exact Moving Average failed at the item starting from : " , i)
 	return rtnVal
-def checkApproxMovingAverage(inList, group, myLkpList, highestNumInList):
+def checkApproxMovingAverage(list_of_numbers, group, mylook_up_list, highestNumInList):
 	'''	Check if every group (number of item in the group to estimate the moving average) 
 	contiguous elemets have 50% of 4, and 25% of 5 and 6
 	'''
@@ -74,19 +82,19 @@ def checkApproxMovingAverage(inList, group, myLkpList, highestNumInList):
 	pct50 = group/2
 	pct25 = group/4
 	#The first three should not contain 6
-	if(inList[:3].count(highestNumInList)>0):
+	if(list_of_numbers[:3].count(highestNumInList)>0):
 		return False
-	for i in range(len(inList)-group):
-		myList = inList[i:(group+i)]
-		if( abs(myList.count(myLkpList[0]) - pct50) < 2): # One more or less is accepted in the group
-			if( abs(myList.count(myLkpList[1]) - pct25) < 2 ):
-				if( abs(myList.count(myLkpList[2]) - pct25) < 2 ):
+	for i in range(len(list_of_numbers)-group):
+		myList = list_of_numbers[i:(group+i)]
+		if( abs(myList.count(mylook_up_list[0]) - pct50) < 2): # One more or less is accepted in the group
+			if( abs(myList.count(mylook_up_list[1]) - pct25) < 2 ):
+				if( abs(myList.count(mylook_up_list[2]) - pct25) < 2 ):
 				 	pass
 		else:
 			rtnVal = False
 			break
 	if(rtnVal == True):
-		rtnVal = checkNearest(inList, myLkpList, 2)
+		rtnVal = checkNearest(list_of_numbers, mylook_up_list, 2)
 		print("Passed moving avg. ", group)
 		groupStr = "Passed moving avg. " + str(group)
 	return rtnVal
