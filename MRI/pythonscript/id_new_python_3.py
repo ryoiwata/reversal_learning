@@ -164,29 +164,33 @@ def make_exact_criteria_list(list_of_numbers=None, number_per_group=8, number_to
     return list_of_numbers 
 
 if __name__ == "__main__":
-    # TODO: Add Argparse description
-    parser = argparse.ArgumentParser(description='')
-    parser.add_argument('output_file', type=str,
-                        help='path to output file', 
-                        action='store', default='./ed_out_new.txt')
+    parser = argparse.ArgumentParser(description='Creates a list of numbers that has every n-number of slices with the same ratio of numbers')
+    parser.add_argument('--output_file', type=str,
+                        action='store', default="./ed_out_new.txt",
+                        nargs="?", const="./ed_out_new.txt",
+                        help='path to output file')
 
+    parser.add_argument('--count', type=int,
+                        action='store', default=1,
+                        nargs="?", const=1,
+                        help='number of times to make a criteria list')
 
-    # Execute the parse_args() method
-    args = my_parser.parse_args()
-    
+    args = parser.parse_args()
+
     output_file = open(args.output_file, 'a');
-    output_file.write("\n" + datetime.datetime.now() + "\n")
+    output_file.write(str(datetime.datetime.now()) + "\n")
+
     
     # TODO: Fix try finally 
     try:
         global groupStr
-        for i in range(count):
+        for i in range(args.count):
             '''
             stmList = makeInputStim()
-            criteriaList = make_criteria_list()
+            criteria_list = make_criteria_list()
             '''
-            criteriaList = make_criteria_list()
-            oFile.write(groupStr + "\n")
-            oFile.write("\n" + repr(criteriaList)+"\n")
+            criteria_list = make_close_criteria_list()
+            output_file.write(str(criteria_list) + "\n")
+            # output_file.write("\n" + repr(criteria_list)+"\n")
     finally:
-        oFile.close()
+        output_file.close()
